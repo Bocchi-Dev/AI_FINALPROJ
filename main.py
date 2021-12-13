@@ -2,7 +2,7 @@ import sys
 import pygame
 
 pygame.init()
-screen = pygame.display.set_mode((601, 780))
+screen = pygame.display.set_mode((600, 780))
 pygame.display.set_caption("Pusod ni lanz")
 bgcolor = (200, 200, 200)
 screen.fill(bgcolor)
