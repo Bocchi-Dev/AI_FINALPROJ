@@ -8,7 +8,7 @@ bgcolor = (200, 200, 200)
 screen.fill(bgcolor)
 continuePlay = True
 
-platform = pygame.image.load("images/plat2.png")
+platform = pygame.image.load("venv/images/plat2.png")
 platPosX = 370
 platPosY = 480
 
