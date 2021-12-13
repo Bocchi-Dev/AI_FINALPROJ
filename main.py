@@ -12,7 +12,7 @@ platform = pygame.image.load("images/plat2.png")
 platPosX = 370
 platPosY = 480
 
-def plat_position(x, y):
+def level1Plat_position(x, y):
     screen.blit(platform, (x, y))
 
 while continuePlay:
@@ -21,7 +21,7 @@ while continuePlay:
             continuePlay = False
 
 
-    plat_position(platPosX, platPosY)
+    level1Plat_position(platPosX, platPosY)
     pygame.display.update()
 
 pygame.quit()
