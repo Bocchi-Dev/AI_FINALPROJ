@@ -11,8 +11,19 @@ pygame.display.set_caption("Pusod ni lanz")
 bgcolor = (200, 200, 200)
 screen.fill(bgcolor)
 
+#platform Images
+prototypeImage = pygame.image.load('images/plat2.png')
+#insert image of platforms for each level
+
+#bools for levels
+isLevelPrototype = True
+isLevelOne = False
+isLevelTwo = False
+isLevelThree = False
+
 #level platform positions
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50)]
+#insert list of platform positions for each level
 
 class Player():
     def __init__(self, x, y):
@@ -36,9 +47,9 @@ class Player():
         if key[pygame.K_SPACE] == False:
             self.jumped = False
         if key[pygame.K_LEFT]:
-            directionX -= 5
+            directionX -= 2
         if key[pygame.K_RIGHT]:
-            directionX += 5
+            directionX += 2
 
         #gravity
         self.vel_y += 1
@@ -58,29 +69,20 @@ class Player():
 
         screen.blit(self.image, self.rect)
 
-class Platform():
-    def __init__(self, positionX, positionY, platformImage):
-        self.positionX = positionX
-        self.positionY = positionY
-        self.platformImage = platformImage
-
 class Level():
     def __init__(self, platformLocations, platformImage):
-        self.platformLocation_list = []
-
-        platform_img = platformImage
+        self.platformLocation_list = platformLocations
+        self.platform = platformImage
 
     def draw(self):
-        for platform in self.platform_list:
-            screen.blit((platform))
-
-#def prototypeLevel():
- #   platform = pygame.image.load("images/plat2.png")
-  #  platformList = [Platform(10, 500, platform), Platform(100, 200, platform), Platform(300, 50, platform)]
-   # for i in range(len(platformList)):
-    #    screen.blit(platformList[i].platformImage, (platformList[i].positionX, platformList[i].positionY))
+        for i in range(len(self.platformLocation_list)):
+            screen.blit(self.platform, self.platformLocation_list[i])
 
 player = Player(100, screen_height - 130)
+level_Proto = Level(prototypeLevelPlatformPos, prototypeImage)
+#insert other levels
+
+pygame.display.update()
 
 continuePlay = True
 while continuePlay:
@@ -91,8 +93,11 @@ while continuePlay:
         if event.type == pygame.QUIT:
             continuePlay = False
 
+    if isLevelPrototype:
+        level_Proto.draw()
+    #insert if levelOne, etc...
+        #insert level_one.draw...
 
-    #prototypeLevel()
     pygame.display.update()
 
 pygame.quit()
