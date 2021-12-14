@@ -16,8 +16,8 @@ plat_size_X = 128
 plat_size_Y = 128
 
 #platform Images
-prototypeImage = pygame.image.load('images/plat2.png')
-#insert image of platforms for each level
+#level 1 platforms
+prototypeImage = pygame.image.load('images/l1plat1.png')
 
 #bools for levels
 isLevelPrototype = True
@@ -25,9 +25,12 @@ isLevelOne = False
 isLevelTwo = False
 isLevelThree = False
 
-#level platform positions
-prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 #insert list of platform positions for each level
+prototypeLevelPlatformPos = [(200, 80), (320, 80), (440, 80),
+                             (-3, 250), (150, 350), (270, 350),
+                             (475, 480), (180, 620), (290, 620), (60, 620)]
+
+
 
 class Player():
     def __init__(self, x, y):
@@ -113,6 +116,7 @@ class Level():
 #instantiating player and levels
 player = Player(100, screen_height - 130)
 level_Proto = Level(prototypeLevelPlatformPos, prototypeImage)
+
 #insert other levels
 
 currentLevel = level_Proto #change to level one later
@@ -130,6 +134,7 @@ while continuePlay:
 
     if isLevelPrototype:
         currentLevel = level_Proto
+
     #insert if levelOne, etc...
         #insert level_one.draw...
 
