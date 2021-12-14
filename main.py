@@ -26,13 +26,13 @@ isLevelTwo = False
 isLevelThree = False
 
 #level platform positions
-prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50)]
+prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 #insert list of platform positions for each level
 
 class Player():
     def __init__(self, x, y):
         sprite = pygame.image.load('images/carrot.png')
-        self.image = pygame.transform.scale(sprite, (40, 80)) #maybe adjust player size later
+        self.image = pygame.transform.scale(sprite, (40, 40)) #maybe adjust player size later
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -63,7 +63,18 @@ class Player():
             self.vel_y = 10
         directionY += self.vel_y
 
-        #check for collision
+        #check for collision with world
+        for plat in currentLevel.platforms:
+            if pygame.Rect.colliderect(plat.rect, self.rect): #check collision on x-axis
+                print("hit")
+                directionX = 0
+            if pygame.Rect.colliderect(plat.rect, self.rect): #check collision on y-axis
+                if self.vel_y < 0: #check if fell on ground
+                    directionY = plat.rect.bottom - self.rect.top
+                    self.vel_y = 0
+                elif self.vel_y >= 0: #check if hit ceiling
+                    directionY = plat.rect.top - self.rect.bottom
+                    self.vel_y = 0
 
         #update player location
         self.rect.x += directionX
@@ -81,6 +92,7 @@ class Platform():
         self.platform = pygame.transform.scale(platformImage, (plat_size_X, plat_size_Y))
         self.rect = self.platform.get_rect()
         self.position = platformLocation
+        self.rect.topleft = platformLocation
 
         #pygame.draw.rect(self.platform, (0, 0, 255), self.rect, 2)
         #screen.blit(self.platform, platformLocation)
@@ -94,9 +106,9 @@ class Level():
     def draw(self):
         for i in range(len(self.platformLocation_list)):
             platformToSpawn = Platform(self.platformLocation_list[i], self.platformImage)
-            #self.platforms.append(platformToSpawn)
-            pygame.draw.rect(platformToSpawn.platform, (0, 255, 0), platformToSpawn.rect, 2)
-            screen.blit(platformToSpawn.platform, platformToSpawn.position)
+            self.platforms.append(platformToSpawn)
+            pygame.draw.rect(self.platforms[i].platform, (0, 255, 0), self.platforms[i].rect, 2)
+            screen.blit(self.platforms[i].platform, self.platforms[i].position)
 
 #instantiating player and levels
 player = Player(100, screen_height - 130)
@@ -120,7 +132,7 @@ while continuePlay:
         currentLevel = level_Proto
     #insert if levelOne, etc...
         #insert level_one.draw...
-    #test = Platform(prototypeImage, prototypeLevelPlatformPos[0])
+
     currentLevel.draw()
     pygame.display.update()
 
