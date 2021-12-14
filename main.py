@@ -48,12 +48,12 @@ class Player():
         #get movement
         key = pygame.key.get_pressed()
         if key[pygame.K_SPACE] and self.jumped == False:
-            self.vel_y = -10
+            self.vel_y = -10 #jump speed
             self.jumped = True
         if key[pygame.K_SPACE] == False:
             self.jumped = False
         if key[pygame.K_LEFT]:
-            directionX -= 2
+            directionX -= 2 #move speed
         if key[pygame.K_RIGHT]:
             directionX += 2
 
@@ -64,20 +64,6 @@ class Player():
         directionY += self.vel_y
 
         #check for collision
-        for i in range(len(currentLevel.platformLocation_list)):
-            #check collision on x-axis
-            if currentLevel.rect.colliderect(self.rect.x + directionX, self.rect.y, self.width, self.height):
-                directionX = 0
-            #check collision on y-axis
-            if currentLevel.rect.colliderect(self.rect.x, self.rect.y + directionY, self.width, self.height):
-                #check if hitting ceiling
-                if self.vel_y < 0:
-                    directionY = currentLevel.rect.bottom - self.rect.top
-                    self.vel_y = 0
-                #check if falling to ground
-                elif self.vel_y >= 0:
-                    directionY = currentLevel.rect.top - self.rect.bottom
-                    self.vel_y = 0
 
         #update player location
         self.rect.x += directionX
@@ -87,17 +73,30 @@ class Player():
             self.rect.bottom = screen_height
             directionY = 0
 
+        pygame.draw.rect(screen, (255, 0, 0), self.rect, 2)
         screen.blit(self.image, self.rect)
+
+class Platform():
+    def __init__(self, platformLocation,  platformImage):
+        self.platform = pygame.transform.scale(platformImage, (plat_size_X, plat_size_Y))
+        self.rect = self.platform.get_rect()
+        self.position = platformLocation
+
+        #pygame.draw.rect(self.platform, (0, 0, 255), self.rect, 2)
+        #screen.blit(self.platform, platformLocation)
 
 class Level():
     def __init__(self, platformLocations, platformImage):
         self.platformLocation_list = platformLocations
-        self.platform = pygame.transform.scale(platformImage, (plat_size_X, plat_size_Y))
-        self.rect = self.platform.get_rect()
+        self.platformImage = platformImage
+        self.platforms = []
 
     def draw(self):
         for i in range(len(self.platformLocation_list)):
-            screen.blit(self.platform, self.platformLocation_list[i])
+            platformToSpawn = Platform(self.platformLocation_list[i], self.platformImage)
+            #self.platforms.append(platformToSpawn)
+            pygame.draw.rect(platformToSpawn.platform, (0, 255, 0), platformToSpawn.rect, 2)
+            screen.blit(platformToSpawn.platform, platformToSpawn.position)
 
 #instantiating player and levels
 player = Player(100, screen_height - 130)
@@ -121,7 +120,7 @@ while continuePlay:
         currentLevel = level_Proto
     #insert if levelOne, etc...
         #insert level_one.draw...
-
+    #test = Platform(prototypeImage, prototypeLevelPlatformPos[0])
     currentLevel.draw()
     pygame.display.update()
 
