@@ -19,6 +19,7 @@ plat_size_Y = 128
 prototypeImage = pygame.image.load('images/plat2.png')
 #insert image of platforms for each level
 
+
 #bools for levels
 isLevelPrototype = True
 isLevelOne = False
@@ -28,6 +29,19 @@ isLevelThree = False
 #level platform positions
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 #insert list of platform positions for each level
+
+#coin Image
+coinImage = pygame.image.load('images/coin.png')
+
+#coin Size
+coin_size_X = 30
+coin_size_Y = 30
+
+#coin positions
+coinPos = [(50, 500)]
+
+#score
+score = 0
 
 class Player():
     def __init__(self, x, y):
@@ -97,11 +111,21 @@ class Platform():
         #pygame.draw.rect(self.platform, (0, 0, 255), self.rect, 2)
         #screen.blit(self.platform, platformLocation)
 
+class Coins():
+    def __init__(self, coinLocation, coinImage):
+        self.coin = pygame.transform.scale(coinImage, (coin_size_X, coin_size_Y))
+        self.rect = self.coin.get_rect()
+        self.position = coinLocation
+        self.rect.center = coinLocation
+
 class Level():
-    def __init__(self, platformLocations, platformImage):
+    def __init__(self, platformLocations, platformImage, coinLocations, coinImage):
         self.platformLocation_list = platformLocations
         self.platformImage = platformImage
         self.platforms = []
+        self.coinLocation_list = coinLocations
+        self.coinImage = coinImage
+        self.coins = []
 
     def draw(self):
         for i in range(len(self.platformLocation_list)):
@@ -109,10 +133,20 @@ class Level():
             self.platforms.append(platformToSpawn)
             pygame.draw.rect(self.platforms[i].platform, (0, 255, 0), self.platforms[i].rect, 2)
             screen.blit(self.platforms[i].platform, self.platforms[i].position)
+            screen.blit(self.platforms[i].platform, self.platforms[i].position)
+
+        #spawn coin
+        for i in range(len(self.coinLocation_list)):
+            coinsToSpawn = Coins(self.coinLocation_list[i], self.coinImage)
+            self.coins.append(coinsToSpawn)
+            pygame.draw.rect(self.coins[i].coin, (0, 255, 0), self.coins[i].rect, 2)
+            screen.blit(self.coins[i].coin, self.coins[i].position)
+            screen.blit(self.coins[i].coin, self.coins[i].position)
+
 
 #instantiating player and levels
 player = Player(100, screen_height - 130)
-level_Proto = Level(prototypeLevelPlatformPos, prototypeImage)
+level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, coinPos, coinImage)
 #insert other levels
 
 currentLevel = level_Proto #change to level one later
