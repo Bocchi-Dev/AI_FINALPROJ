@@ -3,7 +3,7 @@ import pygame
 
 pygame.init()
 
-screen_width = 600
+screen_width = 900
 screen_height = 780
 
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -26,9 +26,9 @@ isLevelTwo = False
 isLevelThree = False
 
 #insert list of platform positions for each level
-prototypeLevelPlatformPos = [(200, 80), (320, 80), (440, 80),
-                             (-3, 250), (150, 350), (270, 350),
-                             (475, 480), (180, 620), (290, 620), (60, 620)]
+prototypeLevelPlatformPos = [(200, 80), (320, 80), (440, 80), (-3, 250),
+                             (150, 350), (270, 350), (750, 300), (630, 300),
+                             (500, 500), (620, 500), (180, 620), (290, 620), (60, 620)]
 
 
 
