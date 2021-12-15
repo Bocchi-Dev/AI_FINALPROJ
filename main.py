@@ -5,7 +5,7 @@ import math
 
 pygame.init()
 
-screen_width = 600
+screen_width = 900
 screen_height = 780
 
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -14,11 +14,11 @@ bgcolor = (200, 200, 200)
 screen.fill(bgcolor)
 
 #set platform dimensions
-plat_size_X = 128
-plat_size_Y = 128
+plat_size_X = 80
+plat_size_Y = 80
 
 #platform Images
-prototypeImage = pygame.image.load('images/plat2.png')
+prototypeImage = pygame.image.load('images/l2plat2.png')
 #insert image of platforms for each level
 
 #bools for levels
@@ -27,9 +27,13 @@ isLevelOne = False
 isLevelTwo = False
 isLevelThree = False
 
-#level platform positions
-prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 #insert list of platform positions for each level
+prototypeLevelPlatformPos = [(10, 130), (200, 250), (270, 250),
+                             (500, 100),  (400, 180), (800, 250),
+                             (730, 250), (70, 350), (180, 450),
+                             (250, 450), (450, 450), (600, 350),
+                             (700, 600), (630, 600),(560, 600),
+                             (490, 600), (300, 700)]
 
 class Player():
     def __init__(self, x, y):
@@ -129,30 +133,7 @@ while continuePlay:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             continuePlay = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                charYChange -= 1
-            elif event.key == pygame.K_DOWN:
-                charYChange += 1
-            elif event.key == pygame.K_LEFT:
-                charXChange -= 1
-            elif event.key == pygame.K_RIGHT:
-                charXChange += 1
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_UP or pygame.K_DOWN:
-                charYChange = 0
-            if event.key == pygame.K_LEFT or pygame.K_RIGHT:
-                charXChange = 0
-    charPosY += charYChange
-    charPosX += charXChange
-    if charPosX <= 0:
-        charPosX = 0
-    elif charPosX >= 480:
-        charPosX = 480
-    if charPosY <= 0:
-        charPosY = 0
-    elif charPosY >= 660:
-        charPosY = 660
+
 
     if isLevelPrototype:
         currentLevel = level_Proto
