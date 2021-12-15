@@ -3,94 +3,67 @@ import pygame
 
 pygame.init()
 
-screen_width = 600
+screen_width = 900
 screen_height = 780
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Pusod ni lanz")
 bgcolor = (200, 200, 200)
-screen.fill(bgcolor)
-
-
-# Plaforms
-platform = pygame.image.load("images/plat2.png")
-
-platPosX = 370
-platPosY = 480
-
-platformPos = [(460, 132), (430, 147), (293, 156), (163, 229), (61, 326), (255, 311),
-               (166, 427), (262, 531), (413, 524), (493, 681), (356, 686), (209, 687)]
-
-# Player
+level3bgImage = pygame.image.load("images/level3bg.png")
+# screen.fill(bgcolor)
+screen.blit(level3bgImage, (0, 0))
 
 
 # Level 3 Enemy
 enemy = pygame.image.load("images/enemyfire.png")
-enemyPosX = 100
+
+enemyPosX = 350
 enemyPosY = 350
 level3EnemySpeed = 0.1
+level3EnemySpeed2 = 0.2
 goingLeft = True
 goingRight = False
+#enemy dimensions
+enemy_size_X = 64
+enemy_size_Y = 64
+enemyPositions = [(166, 87), (256, 253), (529,365), (804, 458),
+                  (16, 586)]
 
-#Spawns the level 3 enemy
-def spawnEnemylvl3(x, y):
-    screen.blit(enemy, (x, y))
 
-#Movement for the level 3 enemy
-def enemyMovementlvl3(enemy, x, y):
-    global enemyPosX
-    global goingRight
-    global goingLeft
-
-    # Detects if the enemy is going left
-    if goingLeft:
-        enemyPosX += level3EnemySpeed
-        screen.blit(enemy, (x, y))
-        # Enemy stops at this position
-        if (enemyPosX == 194.39999999999463):
-            goingLeft = False
-            goingRight = True
-
-    # Detects if the enemy is going right
-    if goingRight:
-        enemyPosX -= level3EnemySpeed
-        screen.blit(enemy, (x, y))
-        # Enemy stops at this position
-        if (enemyPosX == 83.40000000000094):
-            goingLeft = True
-            goingRight = False
-
-    screen.blit(enemy, (x, y))
-
-def plat_position(x, y):
-    screen.blit(platform, (x, y))
-
-pygame.display.update()
-
-enemyMovement = False
+#level3 goal
+level3Goal = pygame.image.load("images/lvl3Goal.png")
+level3GoalPosX = 807
+level3GoalPosY = 618
 
 
 #set platform dimensions
-plat_size_X = 128
-plat_size_Y = 128
+plat_size_X = 65
+plat_size_Y = 65
+
+
 
 #platform Images
 prototypeImage = pygame.image.load('images/plat2.png')
+level3Platform = pygame.image.load('images/l3plat6.png')
 #insert image of platforms for each level
 
 #bools for levels
-isLevelPrototype = True
+isLevelPrototype = False
 isLevelOne = False
 isLevelTwo = False
-isLevelThree = False
+isLevelThree = True
 
 #level platform positions
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
+level3PlatformPos = [(782,94), (711, 94), (642, 94), (520, 134), (361, 134),
+                     (241, 87), (26, 266), (177, 355), (255, 408), (325, 450),
+                     (69, 483), (474, 545), (126, 659), (309, 686), (610, 649),
+                     (805, 679), (831, 166)]
 #insert list of platform positions for each level
 
 class Player():
     def __init__(self, x, y):
-        sprite = pygame.image.load('images/carrot.png')
+        sprite = pygame.image.load('images/ice.png')
         self.image = pygame.transform.scale(sprite, (40, 40)) #maybe adjust player size later
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -156,6 +129,7 @@ class Platform():
         #pygame.draw.rect(self.platform, (0, 0, 255), self.rect, 2)
         #screen.blit(self.platform, platformLocation)
 
+
 class Level():
     def __init__(self, platformLocations, platformImage):
         self.platformLocation_list = platformLocations
@@ -169,36 +143,91 @@ class Level():
             pygame.draw.rect(self.platforms[i].platform, (0, 255, 0), self.platforms[i].rect, 2)
             screen.blit(self.platforms[i].platform, self.platforms[i].position)
 
-#instantiating player and levels
+# instantiating player and levels
 player = Player(100, screen_height - 130)
 level_Proto = Level(prototypeLevelPlatformPos, prototypeImage)
-#insert other levels
+level_Three = Level(level3PlatformPos, level3Platform)
+# insert other levels
 
-currentLevel = level_Proto #change to level one later
+currentLevel = level_Three# change to level one later
+
+#Spawns the level 3 enemy
+def spawnEnemylvl3():
+    screen.blit(enemy, enemyPositions[0])
+    screen.blit(enemy, enemyPositions[1])
+    screen.blit(enemy, enemyPositions[2])
+    screen.blit(enemy, enemyPositions[3])
+    screen.blit(enemy, enemyPositions[4])
+
+
+# Movement for the level 3 enemy
+def enemyMovementlvl3(enemy, x, y):
+    global enemyPosX
+    global goingRight
+    global goingLeft
+
+    # Detects if the enemy is going left
+    if goingLeft:
+        enemyPosX += level3EnemySpeed2
+        screen.blit(enemy, (x, y))
+        # Enemy stops at this position
+        if (enemyPosX == 480.99999999999255):
+            goingLeft = False
+            goingRight = True
+
+    # Detects if the enemy is going right
+    if goingRight:
+        enemyPosX -= level3EnemySpeed2
+        screen.blit(enemy, (x, y))
+        # Enemy stops at this position
+        if (enemyPosX == 350.59999999999997):
+            goingLeft = True
+            goingRight = False
+
+    screen.blit(enemy, (x, y))
+
+
+#Level 3 Goal
+def level3GoalObject(x, y):
+    screen.blit(level3Goal, (x, y))
+
+
+pygame.display.update()
+
+enemyMovement = False
 
 pygame.display.update()
 
 continuePlay = True
 while continuePlay:
-    screen.fill(bgcolor)
+    # screen.fill(bgcolor)
+    screen.blit(level3bgImage, (0, 0))
     player.update()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             continuePlay = False
 
-    # Calls spawn enemy
-    spawnEnemylvl3(enemyPosX, enemyPosY)
-
-    # Makes enemy movement true
-    enemyMovement = True
-
-    # Calls the enemy movement
-    if enemyMovement:
-        enemyMovementlvl3(enemy, enemyPosX, enemyPosY)
 
     if isLevelPrototype:
         currentLevel = level_Proto
+
+    if isLevelThree:
+        currentLevel = level_Three
+        # Calls level 3 Goal
+        level3GoalObject(level3GoalPosX, level3GoalPosY)
+        # Calls function to spawn enemy
+        spawnEnemylvl3()
+
+        # Makes enemy movement true
+        enemyMovement = True
+
+        if enemyMovement:
+            # Calls the enemy movement
+            enemyMovementlvl3(enemy, enemyPosX, enemyPosY)
+
+
+
     #insert if levelOne, etc...
         #insert level_one.draw...
 
