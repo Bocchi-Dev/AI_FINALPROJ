@@ -16,6 +16,7 @@ screen.blit(level3bgImage, (0, 0))
 
 # Level 3 Enemy
 enemy = pygame.image.load("images/enemyfire.png")
+enemy2 = pygame.image.load("images/enemyfire.png")
 
 enemyPosX = 350
 enemyPosY = 350
@@ -26,8 +27,9 @@ goingRight = False
 #enemy dimensions
 enemy_size_X = 64
 enemy_size_Y = 64
-enemyPositions = [(166, 87), (256, 253), (529,365), (804, 458),
+enemyPositions = [(166, 87), (256, 253), (529, 365), (804, 458),
                   (16, 586)]
+enemyPosXList = [166, 256, 529, 804, 16]
 
 
 #level3 goal
@@ -90,7 +92,7 @@ class Player():
             directionX += 2
 
         #gravity
-        self.vel_y += 0.15
+        self.vel_y += 0.40
         if self.vel_y > 10:
             self.vel_y = 10
         directionY += self.vel_y
@@ -98,7 +100,7 @@ class Player():
         #check for collision with world
         for plat in currentLevel.platforms:
             if pygame.Rect.colliderect(plat.rect, self.rect): #check collision on x-axis
-                print("hit")
+                # print("hit")
                 directionX = 0
             if pygame.Rect.colliderect(plat.rect, self.rect): #check collision on y-axis
                 if self.vel_y < 0: #check if fell on ground
@@ -187,6 +189,7 @@ def enemyMovementlvl3(enemy, x, y):
     screen.blit(enemy, (x, y))
 
 
+
 #Level 3 Goal
 def level3GoalObject(x, y):
     screen.blit(level3Goal, (x, y))
@@ -201,7 +204,6 @@ pygame.display.update()
 continuePlay = True
 while continuePlay:
     # screen.fill(bgcolor)
-
 
 
     for event in pygame.event.get():
@@ -226,6 +228,8 @@ while continuePlay:
         if enemyMovement:
             # Calls the enemy movement
             enemyMovementlvl3(enemy, enemyPosX, enemyPosY)
+
+
 
     player.update()
 
