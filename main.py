@@ -201,8 +201,8 @@ pygame.display.update()
 continuePlay = True
 while continuePlay:
     # screen.fill(bgcolor)
-    screen.blit(level3bgImage, (0, 0))
-    player.update()
+
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -213,6 +213,7 @@ while continuePlay:
         currentLevel = level_Proto
 
     if isLevelThree:
+        screen.blit(level3bgImage, (0, 0))
         currentLevel = level_Three
         # Calls level 3 Goal
         level3GoalObject(level3GoalPosX, level3GoalPosY)
@@ -226,7 +227,7 @@ while continuePlay:
             # Calls the enemy movement
             enemyMovementlvl3(enemy, enemyPosX, enemyPosY)
 
-
+    player.update()
 
     #insert if levelOne, etc...
         #insert level_one.draw...
