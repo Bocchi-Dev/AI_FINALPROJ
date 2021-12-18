@@ -15,6 +15,10 @@ screen.fill(bgcolor)
 plat_size_X = 128
 plat_size_Y = 128
 
+#set coin dimensions
+coin_size_X = 30
+coin_size_Y = 30
+
 #platform Images
 prototypeImage = pygame.image.load('images/plat2.png')
 #insert image of platforms for each level
@@ -38,9 +42,10 @@ scoreY = 10
 
 #coins
 coinImage = pygame.image.load('images/coin.png')
+coinPrototypeLevelLocations = [(50, 500), (150, 200)]
 Coins = [
-    pygame.Rect(50, 500, 30, 30),
-    pygame.Rect(150, 200, 30, 30)
+    #pygame.Rect(50, 500, 30, 30),
+    #pygame.Rect(150, 200, 30, 30)
 ]
 
 def show_score(x, y):
@@ -48,6 +53,7 @@ def show_score(x, y):
     screen.blit(score_display, (x, y))
 
 class Player():
+    global score
     def __init__(self, x, y):
         sprite = pygame.image.load('images/carrot.png')
         self.image = pygame.transform.scale(sprite, (40, 40)) #maybe adjust player size later
@@ -94,6 +100,13 @@ class Player():
                     directionY = plat.rect.top - self.rect.bottom
                     self.vel_y = 0
 
+        #collide with coins
+        for c in Coins:
+            if c.rect.colliderect(self.rect):
+                Coins.remove(c)
+                score += 1
+                print(score)
+
         #update player location
         self.rect.x += directionX
         self.rect.y += directionY
@@ -112,26 +125,40 @@ class Platform():
         self.position = platformLocation
         self.rect.topleft = platformLocation
 
-        #pygame.draw.rect(self.platform, (0, 0, 255), self.rect, 2)
-        #screen.blit(self.platform, platformLocation)
+class Coin():
+    def __init__(self, coinLocation, coinImage):
+        self.coin = pygame.transform.scale(coinImage, (coin_size_X, coin_size_Y))
+        self.rect = self.coin.get_rect()
+        self.position = coinLocation
+        self.rect.topleft = coinLocation
 
 class Level():
-    def __init__(self, platformLocations, platformImage):
+    global Coins
+    def __init__(self, platformLocations, platformImage, coinsLocation, coinImage):
         self.platformLocation_list = platformLocations
+        self.coinLocation_list = coinsLocation
+        self.coinImage = coinImage
         self.platformImage = platformImage
         self.platforms = []
 
     def draw(self):
+        #spawn platforms
         for i in range(len(self.platformLocation_list)):
             platformToSpawn = Platform(self.platformLocation_list[i], self.platformImage)
             self.platforms.append(platformToSpawn)
             pygame.draw.rect(self.platforms[i].platform, (0, 255, 0), self.platforms[i].rect, 2)
             screen.blit(self.platforms[i].platform, self.platforms[i].position)
-            screen.blit(self.platforms[i].platform, self.platforms[i].position)
+
+        #spawn coins
+        for i in range(len(self.coinLocation_list)):
+            coinToSpawn = Coin(self.coinLocation_list[i], self.coinImage)
+            Coins.append(coinToSpawn)
+            screen.blit(Coins[i].coin, Coins[i].position)
+
 
 #instantiating player and levels
 player = Player(100, screen_height - 130)
-level_Proto = Level(prototypeLevelPlatformPos, prototypeImage)
+level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, coinPrototypeLevelLocations, coinImage)
 #insert other levels
 
 currentLevel = level_Proto #change to level one later
@@ -149,14 +176,10 @@ while continuePlay:
             continuePlay = False
 
     #coins
-    for c in Coins:
-        screen.blit(coinImage, (c[0], c[1]))
+    #for c in Coins:
+        #screen.blit(coinImage, (c[0], c[1]))
 
-    for c in Coins:
-        if c.colliderect(player):
-            Coins.remove(c)
-            score += 1
-            print(score)
+    #
 
     #display score
     show_score(scoreX, scoreY)
