@@ -15,7 +15,6 @@ screen.fill(bgcolor)
 plat_size_X = 128
 plat_size_Y = 128
 
-#set coin dimensions
 coin_size_X = 30
 coin_size_Y = 30
 
@@ -42,11 +41,27 @@ scoreY = 10
 
 #coins
 coinImage = pygame.image.load('images/coin.png')
-coinPrototypeLevelLocations = [(50, 500), (150, 200)]
+prototypeLevelCoinsPos = [(50, 500), (150, 200), (350, 50)]
 Coins = [
-    #pygame.Rect(50, 500, 30, 30),
-    #pygame.Rect(150, 200, 30, 30)
+
 ]
+
+def set_Coins(coinLocations):
+    global Coins
+    for loc in coinLocations:
+        Coins.append(pygame.Rect(loc[0], loc[1], coin_size_X, coin_size_Y))
+
+def spawn_coins():
+    global score
+    #coins
+    for c in Coins:
+        screen.blit(coinImage, (c[0], c[1]))
+
+    for c in Coins:
+        if c.colliderect(player):
+            Coins.remove(c)
+            score += 1
+            print(score)
 
 def show_score(x, y):
     score_display = font.render("Score: " + str(score), True, (255, 255, 255))
@@ -100,14 +115,6 @@ class Player():
                     directionY = plat.rect.top - self.rect.bottom
                     self.vel_y = 0
 
-        #collide with coins
-        for c in Coins:
-            if self.rect.colliderect(c.rect):
-                Coins.remove(c)
-                del (c)
-                score += 1
-                print(score)
-
         #update player location
         self.rect.x += directionX
         self.rect.y += directionY
@@ -126,40 +133,30 @@ class Platform():
         self.position = platformLocation
         self.rect.topleft = platformLocation
 
-class Coin():
-    def __init__(self, coinLocation, coinImage):
-        self.coin = pygame.transform.scale(coinImage, (coin_size_X, coin_size_Y))
-        self.rect = self.coin.get_rect()
-        self.position = coinLocation
-        self.rect.topleft = coinLocation
+        #pygame.draw.rect(self.platform, (0, 0, 255), self.rect, 2)
+        #screen.blit(self.platform, platformLocation)
 
 class Level():
-    global Coins
-    def __init__(self, platformLocations, platformImage, coinsLocation, coinImage):
+    def __init__(self, platformLocations, platformImage, playerSpawn, coinLocations):
         self.platformLocation_list = platformLocations
-        self.coinLocation_list = coinsLocation
-        self.coinImage = coinImage
         self.platformImage = platformImage
         self.platforms = []
+        self.coinsPos = coinLocations
+        player.rect.x = playerSpawn[0]
+        player.rect.y = playerSpawn[1]
+        set_Coins(coinLocations)
 
     def draw(self):
-        #spawn platforms
         for i in range(len(self.platformLocation_list)):
             platformToSpawn = Platform(self.platformLocation_list[i], self.platformImage)
             self.platforms.append(platformToSpawn)
             pygame.draw.rect(self.platforms[i].platform, (0, 255, 0), self.platforms[i].rect, 2)
             screen.blit(self.platforms[i].platform, self.platforms[i].position)
-
-        #spawn coins
-        for i in range(len(self.coinLocation_list)):
-            coinToSpawn = Coin(self.coinLocation_list[i], self.coinImage)
-            Coins.append(coinToSpawn)
-            screen.blit(Coins[i].coin, Coins[i].position)
-
+            screen.blit(self.platforms[i].platform, self.platforms[i].position)
 
 #instantiating player and levels
 player = Player(100, screen_height - 130)
-level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, coinPrototypeLevelLocations, coinImage)
+level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, (100, 10), prototypeLevelCoinsPos)
 #insert other levels
 
 currentLevel = level_Proto #change to level one later
@@ -176,11 +173,6 @@ while continuePlay:
         if event.type == pygame.QUIT:
             continuePlay = False
 
-    #coins
-    #for c in Coins:
-        #screen.blit(coinImage, (c[0], c[1]))
-
-    #
 
     #display score
     show_score(scoreX, scoreY)
@@ -189,6 +181,7 @@ while continuePlay:
         currentLevel = level_Proto
     #insert if levelOne, etc...
         #insert level_one.draw...
+    spawn_coins()
     currentLevel.draw()
     pygame.display.update()
 
