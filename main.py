@@ -53,7 +53,6 @@ def show_score(x, y):
     screen.blit(score_display, (x, y))
 
 class Player():
-    global score
     def __init__(self, x, y):
         sprite = pygame.image.load('images/carrot.png')
         self.image = pygame.transform.scale(sprite, (40, 40)) #maybe adjust player size later
@@ -66,6 +65,7 @@ class Player():
         self.jumped = False
 
     def update(self):
+        global score
         directionX = 0
         directionY = 0
 
@@ -102,8 +102,9 @@ class Player():
 
         #collide with coins
         for c in Coins:
-            if c.rect.colliderect(self.rect):
+            if self.rect.colliderect(c.rect):
                 Coins.remove(c)
+                del (c)
                 score += 1
                 print(score)
 
