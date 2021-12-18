@@ -47,11 +47,10 @@ class Player():
 
         #get movement
         key = pygame.key.get_pressed()
-        if key[pygame.K_UP] and self.jumped == False:
+        if key[pygame.K_SPACE] and self.jumped == False:
             self.vel_y = -10 #jump speed
             self.jumped = True
-            print("jump")
-        if key[pygame.K_UP] == False:
+        if key[pygame.K_SPACE] == False:
             self.jumped = False
         if key[pygame.K_LEFT]:
             directionX -= 2 #move speed
@@ -65,10 +64,10 @@ class Player():
         directionY += self.vel_y
 
         # collision with screen borders
-        if self.rect.right >= screen_width or self.rect.left <= 0:
-            directionX = 0
-        if self.rect.top <= 0:
-            directionY = 0
+        #if self.rect.right >= screen_width or self.rect.left <= 0:
+         #   directionX = 0
+        #if self.rect.top <= 0:
+         #    directionY = 0
 
         #check for collision with world
         collision_tolerance = 10
@@ -78,17 +77,13 @@ class Player():
                     directionX = 0
                 if abs(self.rect.right - plat.rect.left) < collision_tolerance and directionX > 0: #colliding on left of platform
                     directionX = 0
-                if abs(self.rect.bottom - plat.rect.top) < collision_tolerance and directionY > 0: #colliding on top of platform
-                    if self.vel_y < 0:
+                if self.rect.colliderect(plat.rect):  # check collision on y-axis
+                    if self.vel_y < 0: #check if hit ceiling
                         directionY = plat.rect.bottom - self.rect.top
                         self.vel_y = 0
-                #if abs(self.rect.top - plat.rect.bottom) < collision_tolerance and directionY > 0: #colliding from below platform
-                 #   directionY = self.rect.top - plat.rect.bottom
-                  #  self.vel_y = 0
-                #if pygame.Rect.colliderect(plat.rect, self.rect):  # check collision on y-axis
-                  #  if self.vel_y < 0: #check if fell on ground
-                   #     directionY = plat.rect.bottom - self.rect.top
-                    #    self.vel_y = 0
+                if abs(self.rect.bottom - plat.rect.top) < collision_tolerance and directionY > 0:  # colliding on top of platform
+                    directionY = plat.rect.bottom - self.rect.top
+                    self.vel_y = 0
 
             #if pygame.Rect.colliderect(plat.rect, self.rect): #check collision on x-axis
              #   print("hit")
