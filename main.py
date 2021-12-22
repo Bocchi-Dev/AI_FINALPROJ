@@ -11,24 +11,27 @@ screen_height = 780
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Pusod ni lanz")
 bgcolor = (200, 200, 200)
-screen.fill(bgcolor)
+level2bgImage = pygame.image.load("images/level2bg.png")
+# screen.fill(bgcolor)
+screen.blit(level2bgImage, (0, 0))
+
 
 #set platform dimensions
 plat_size_X = 80
 plat_size_Y = 80
 
 #platform Images
-prototypeImage = pygame.image.load('images/l2plat2.png')
+level2Plaform = pygame.image.load('images/l2plat2.png')
 #insert image of platforms for each level
 
 #bools for levels
-isLevelPrototype = True
+isLevelPrototype = False
 isLevelOne = False
-isLevelTwo = False
+isLevelTwo = True
 isLevelThree = False
 
 #insert list of platform positions for each level
-prototypeLevelPlatformPos = [(10, 130), (200, 250), (270, 250),
+level2PlatformPos = [(10, 130), (200, 250), (270, 250),
                              (500, 100),  (400, 180), (800, 250),
                              (730, 250), (70, 350), (180, 450),
                              (250, 450), (450, 450), (600, 350),
@@ -118,10 +121,9 @@ class Level():
 
 #instantiating player and levels
 player = Player(100, screen_height - 130)
-level_Proto = Level(prototypeLevelPlatformPos, prototypeImage)
-#insert other levels
+level_Two = Level(level2PlatformPos, level2Plaform)
 
-currentLevel = level_Proto #change to level one later
+currentLevel = level_Two
 
 pygame.display.update()
 
@@ -135,10 +137,12 @@ while continuePlay:
             continuePlay = False
 
 
-    if isLevelPrototype:
-        currentLevel = level_Proto
-    #insert if levelOne, etc...
-        #insert level_one.draw...
+    if isLevelTwo:
+        currentLevel = level_Two
+        screen.blit(level2bgImage, (0, 0))
+        currentLevel = level_Two
+
+    player.update()
 
     currentLevel.draw()
     pygame.display.update()
