@@ -1,5 +1,7 @@
 import sys
 import pygame
+import random
+import math
 
 pygame.init()
 
@@ -12,6 +14,7 @@ bgcolor = (200, 200, 200)
 
 #BG Images
 level1bgImage = pygame.image.load("images/level1bg.png")
+level2bgImage = pygame.image.load("images/level2bg.png")
 level3bgImage = pygame.image.load("images/level3bg.png")
 
 # Level 3 Enemy
@@ -40,6 +43,7 @@ coin_size_Y = 30
 prototypeImage = pygame.image.load('images/plat2.png')
 level3Platform = pygame.image.load('images/l3plat6.png')
 level1Platform = pygame.image.load('images/l1plat1.png')
+level2Plaform = pygame.image.load('images/l2plat2.png')
 
 #bools for levels
 isLevelPrototype = False
@@ -48,14 +52,21 @@ isLevelTwo = False
 isLevelThree = False
 
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
-level3PlatformPos = [(782,94), (711, 94), (642, 94), (520, 134), (361, 134),
-                     (241, 87), (26, 266), (177, 355), (255, 408), (325, 450),
-                     (69, 483), (474, 545), (126, 659), (309, 686), (610, 649),
-                     (805, 679), (831, 166)]
+
 #insert list of platform positions for each level
 Level1PlatformPos = [(200, 80), (320, 80), (440, 80), (-3, 250),
                              (150, 350), (270, 350), (750, 300), (630, 300),
                              (500, 500), (620, 500), (180, 620), (290, 620), (60, 620)]
+level2PlatformPos = [(10, 130), (200, 250), (270, 250),
+                             (500, 100),  (400, 180), (800, 250),
+                             (730, 250), (70, 350), (180, 450),
+                             (250, 450), (450, 450), (600, 350),
+                             (700, 600), (630, 600),(560, 600),
+                             (490, 600), (300, 700)]
+level3PlatformPos = [(782,94), (711, 94), (642, 94), (520, 134), (361, 134),
+                     (241, 87), (26, 266), (177, 355), (255, 408), (325, 450),
+                     (69, 483), (474, 545), (126, 659), (309, 686), (610, 649),
+                     (805, 679), (831, 166)]
 
 #score
 score = 0
@@ -244,9 +255,11 @@ player = Player(100, screen_height - 130)
 
 level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, enemyPositions, enemy, level3bgImage,
                     (0, 0), prototypeLevelCoinsPos)
-level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, level3bgImage,
-                    (100, 10), prototypeLevelCoinsPos)
 level_One = Level(Level1PlatformPos, level1Platform, enemyPositions, enemy, level1bgImage,
+                    (100, 10), prototypeLevelCoinsPos)
+level_Two = Level(level2PlatformPos, level2Plaform, enemyPositions, enemy, level1bgImage,
+                    (100, 10), prototypeLevelCoinsPos)
+level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, level3bgImage,
                     (100, 10), prototypeLevelCoinsPos)
 # insert other levels
 
@@ -261,7 +274,6 @@ while continuePlay:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             continuePlay = False
-
     #display score
     show_score(scoreX, scoreY)
 
@@ -274,6 +286,9 @@ while continuePlay:
     if isLevelOne:
         screen.blit(level1bgImage, (0, 0))
         currentLevel = level_One
+    if isLevelTwo:
+        screen.blit(level2bgImage, (0, 0))
+        currentLevel = level_Two
 
     currentLevel.draw()
     player.update()
