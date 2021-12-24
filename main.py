@@ -15,9 +15,13 @@ screen.fill(bgcolor)
 plat_size_X = 100
 plat_size_Y = 100
 
+coin_size_X = 30
+coin_size_Y = 30
+
 #platform Images
 prototypeImage = pygame.image.load('images/plat2.png')
 #insert image of platforms for each level
+
 
 #bools for levels
 isLevelPrototype = True
@@ -28,6 +32,40 @@ isLevelThree = False
 #level platform positions
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 #insert list of platform positions for each level
+
+#score
+score = 0
+font = pygame.font.SysFont('Arial', 32)
+scoreX = 10
+scoreY = 10
+
+#coins
+coinImage = pygame.image.load('images/coin.png')
+prototypeLevelCoinsPos = [(50, 500), (150, 200), (350, 50)]
+Coins = [
+
+]
+
+def set_Coins(coinLocations):
+    global Coins
+    for loc in coinLocations:
+        Coins.append(pygame.Rect(loc[0], loc[1], coin_size_X, coin_size_Y))
+
+def spawn_coins():
+    global score
+    #coins
+    for c in Coins:
+        screen.blit(coinImage, (c[0], c[1]))
+
+    for c in Coins:
+        if c.colliderect(player):
+            Coins.remove(c)
+            score += 1
+            print(score)
+
+def show_score(x, y):
+    score_display = font.render("Score: " + str(score), True, (255, 255, 255))
+    screen.blit(score_display, (x, y))
 
 class Player():
     def __init__(self, x, y):
@@ -42,6 +80,7 @@ class Player():
         self.jumped = False
 
     def update(self):
+        global score
         directionX = 0
         directionY = 0
 
@@ -106,10 +145,14 @@ class Platform():
         self.rect.topleft = platformLocation
 
 class Level():
-    def __init__(self, platformLocations, platformImage):
+    def __init__(self, platformLocations, platformImage, playerSpawn, coinLocations):
         self.platformLocation_list = platformLocations
         self.platformImage = platformImage
         self.platforms = []
+        self.coinsPos = coinLocations
+        player.rect.x = playerSpawn[0]
+        player.rect.y = playerSpawn[1]
+        set_Coins(coinLocations)
 
     def draw(self):
         for i in range(len(self.platformLocation_list)):
@@ -117,10 +160,11 @@ class Level():
             self.platforms.append(platformToSpawn)
             pygame.draw.rect(self.platforms[i].platform, (0, 255, 0), self.platforms[i].rect, 2)
             screen.blit(self.platforms[i].platform, self.platforms[i].position)
+            screen.blit(self.platforms[i].platform, self.platforms[i].position)
 
 #instantiating player and levels
 player = Player(100, screen_height - 130)
-level_Proto = Level(prototypeLevelPlatformPos, prototypeImage)
+level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, (100, 10), prototypeLevelCoinsPos)
 #insert other levels
 
 currentLevel = level_Proto #change to level one later
@@ -132,15 +176,20 @@ while continuePlay:
     screen.fill(bgcolor)
     player.update()
 
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             continuePlay = False
+
+
+    #display score
+    show_score(scoreX, scoreY)
 
     if isLevelPrototype:
         currentLevel = level_Proto
     #insert if levelOne, etc...
         #insert level_one.draw...
-
+    spawn_coins()
     currentLevel.draw()
     pygame.display.update()
 
