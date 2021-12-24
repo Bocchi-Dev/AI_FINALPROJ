@@ -115,9 +115,9 @@ class Player():
         if key[pygame.K_SPACE] == False:
             self.jumped = False
         if key[pygame.K_LEFT]:
-            directionX -= 2 #move speed
+            directionX -= 7 #move speed
         if key[pygame.K_RIGHT]:
-            directionX += 2
+            directionX += 7
 
         #gravity
         self.vel_y += 0.40
@@ -266,12 +266,9 @@ while continuePlay:
         screen.blit(level3bgImage, (0, 0))
         currentLevel = level_Three
 
-    player.update()
-
-    #insert if levelOne, etc...
-        #insert level_one.draw...
-    spawn_coins()
     currentLevel.draw()
+    player.update()
+    spawn_coins()
     pygame.display.update()
 
 pygame.quit()
