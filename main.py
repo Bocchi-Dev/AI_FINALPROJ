@@ -10,31 +10,22 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Pusod ni lanz")
 bgcolor = (200, 200, 200)
 level3bgImage = pygame.image.load("images/level3bg.png")
-# screen.fill(bgcolor)
 screen.blit(level3bgImage, (0, 0))
 
 # Level 3 Enemy
 enemy = pygame.image.load("images/enemyfire.png")
 enemy2 = pygame.image.load("images/enemyfire.png")
 
-enemyPosX = 350
-enemyPosY = 350
-level3EnemySpeed = 0.1
-level3EnemySpeed2 = 0.2
-goingLeft = True
-goingRight = False
 #enemy dimensions
 enemy_size_X = 64
 enemy_size_Y = 64
 enemyPositions = [(166, 87), (256, 253), (529, 365), (804, 458),
                   (16, 586)]
-enemyPosXList = [166, 256, 529, 804, 16]
 
 #level3 goal
 level3Goal = pygame.image.load("images/lvl3Goal.png")
 level3GoalPosX = 807
 level3GoalPosY = 618
-
 
 #set platform dimensions
 plat_size_X = 100
@@ -50,10 +41,10 @@ level3Platform = pygame.image.load('images/l3plat6.png')
 
 
 #bools for levels
-isLevelPrototype = False
+isLevelPrototype = True
 isLevelOne = False
 isLevelTwo = False
-isLevelThree = True
+isLevelThree = False
 
 #level platform positions
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
@@ -72,9 +63,7 @@ scoreY = 10
 #coins
 coinImage = pygame.image.load('images/coin.png')
 prototypeLevelCoinsPos = [(50, 500), (150, 200), (350, 50)]
-Coins = [
-
-]
+Coins = []
 
 def set_Coins(coinLocations):
     global Coins
@@ -96,6 +85,10 @@ def spawn_coins():
 def show_score(x, y):
     score_display = font.render("Score: " + str(score), True, (255, 255, 255))
     screen.blit(score_display, (x, y))
+
+#Level 3 Goal
+def level3GoalObject(x, y):
+    screen.blit(level3Goal, (x, y))
 
 class Player():
     def __init__(self, x, y):
@@ -212,7 +205,8 @@ class Enemy():
 
 
 class Level():
-    def __init__(self, platformLocations, platformImage, enemyLocations, enemyImage, backgroundImage, playerSpawn, coinLocations):
+    def __init__(self, platformLocations, platformImage, enemyLocations, enemyImage, backgroundImage,
+                 playerSpawn, coinLocations):
         self.background = backgroundImage
         self.enemyLocation_list = enemyLocations
         self.enemyImage = enemyImage
@@ -240,21 +234,17 @@ class Level():
             #screen.blit(self.enemies[i].enemy, self.enemies[i].position)
             self.enemies[i].update()
 
-#Level 3 Goal
-def level3GoalObject(x, y):
-    screen.blit(level3Goal, (x, y))
+
 
 # instantiating player and levels
 player = Player(100, screen_height - 130)
-level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, enemyPositions, enemy, level3bgImage)
-level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, level3bgImage)
+level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, enemyPositions, enemy, level3bgImage,
+                    (0, 0), prototypeLevelCoinsPos)
+level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, level3bgImage,
+                    (100, 10), prototypeLevelCoinsPos)
 # insert other levels
 
-currentLevel = level_Three# change to level one later
-
-pygame.display.update()
-
-enemyMovement = False
+currentLevel = level_Proto# change to level one later
 
 pygame.display.update()
 
