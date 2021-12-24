@@ -37,13 +37,17 @@ level3GoalPosY = 618
 
 
 #set platform dimensions
-plat_size_X = 65
-plat_size_Y = 65
+plat_size_X = 100
+plat_size_Y = 100
+
+coin_size_X = 30
+coin_size_Y = 30
 
 #platform Images
 prototypeImage = pygame.image.load('images/plat2.png')
 level3Platform = pygame.image.load('images/l3plat6.png')
 #insert image of platforms for each level
+
 
 #bools for levels
 isLevelPrototype = False
@@ -59,6 +63,40 @@ level3PlatformPos = [(782,94), (711, 94), (642, 94), (520, 134), (361, 134),
                      (805, 679), (831, 166)]
 #insert list of platform positions for each level
 
+#score
+score = 0
+font = pygame.font.SysFont('Arial', 32)
+scoreX = 10
+scoreY = 10
+
+#coins
+coinImage = pygame.image.load('images/coin.png')
+prototypeLevelCoinsPos = [(50, 500), (150, 200), (350, 50)]
+Coins = [
+
+]
+
+def set_Coins(coinLocations):
+    global Coins
+    for loc in coinLocations:
+        Coins.append(pygame.Rect(loc[0], loc[1], coin_size_X, coin_size_Y))
+
+def spawn_coins():
+    global score
+    #coins
+    for c in Coins:
+        screen.blit(coinImage, (c[0], c[1]))
+
+    for c in Coins:
+        if c.colliderect(player):
+            Coins.remove(c)
+            score += 1
+            print(score)
+
+def show_score(x, y):
+    score_display = font.render("Score: " + str(score), True, (255, 255, 255))
+    screen.blit(score_display, (x, y))
+
 class Player():
     def __init__(self, x, y):
         sprite = pygame.image.load('images/ice.png')
@@ -72,6 +110,7 @@ class Player():
         self.jumped = False
 
     def update(self):
+        global score
         directionX = 0
         directionY = 0
 
@@ -93,18 +132,29 @@ class Player():
             self.vel_y = 10
         directionY += self.vel_y
 
+        # collision with screen borders
+        if self.rect.right >= screen_width:
+            self.rect.x = 10
+        if  self.rect.left <= 0:
+            self.rect.x = screen_width - 50
+        if self.rect.top <= 0:
+            self.rect.y = screen_height
+
         #check for collision with world
+        collision_tolerance = 10
         for plat in currentLevel.platforms:
-            if pygame.Rect.colliderect(plat.rect, self.rect): #check collision on x-axis
-                # print("hit")
-                directionX = 0
-            if pygame.Rect.colliderect(plat.rect, self.rect): #check collision on y-axis
-                if self.vel_y < 0: #check if fell on ground
+            if self.rect.colliderect(plat.rect):
+                if abs(self.rect.left - plat.rect.right) < collision_tolerance and directionX < 0: #colliding on right of platform
+                    directionX = 0
+                if abs(self.rect.right - plat.rect.left) < collision_tolerance and directionX > 0: #colliding on left of platform
+                    directionX = 0
+                  # check collision on y-axis
+                if self.vel_y <= 0 and abs(self.rect.top - plat.rect.bottom) < collision_tolerance: #check if hit ceiling
                     directionY = plat.rect.bottom - self.rect.top
                     self.vel_y = 0
-                elif self.vel_y >= 0: #check if hit ceiling
-                    directionY = plat.rect.top - self.rect.bottom
-                    self.vel_y = 0
+                if self.vel_y >= 0 and self.rect.top < plat.rect.top: #check if fall on ground
+                    print(self.vel_y)
+                    self.rect.bottom = plat.rect.top
 
         #update player location
         self.rect.x += directionX
@@ -123,9 +173,6 @@ class Platform():
         self.rect = self.platform.get_rect()
         self.position = platformLocation
         self.rect.topleft = platformLocation
-
-        #pygame.draw.rect(self.platform, (0, 0, 255), self.rect, 2)
-        #screen.blit(self.platform, platformLocation)
 
 class Enemy():
     def __init__(self, enemyPosition, enemyImage):
@@ -165,7 +212,7 @@ class Enemy():
 
 
 class Level():
-    def __init__(self, platformLocations, platformImage, enemyLocations, enemyImage, backgroundImage):
+    def __init__(self, platformLocations, platformImage, enemyLocations, enemyImage, backgroundImage, playerSpawn, coinLocations):
         self.background = backgroundImage
         self.enemyLocation_list = enemyLocations
         self.enemyImage = enemyImage
@@ -173,6 +220,10 @@ class Level():
         self.platformImage = platformImage
         self.platforms = []
         self.enemies = []
+        self.coinsPos = coinLocations
+        player.rect.x = playerSpawn[0]
+        player.rect.y = playerSpawn[1]
+        set_Coins(coinLocations)
 
     def draw(self):
         screen.blit(self.background, (0, 0))
@@ -180,6 +231,7 @@ class Level():
             platformToSpawn = Platform(self.platformLocation_list[i], self.platformImage)
             self.platforms.append(platformToSpawn)
             pygame.draw.rect(self.platforms[i].platform, (0, 255, 0), self.platforms[i].rect, 2)
+            screen.blit(self.platforms[i].platform, self.platforms[i].position)
             screen.blit(self.platforms[i].platform, self.platforms[i].position)
 
         for i in range(len(self.enemyLocation_list)):
@@ -210,11 +262,12 @@ continuePlay = True
 while continuePlay:
     # screen.fill(bgcolor)
 
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             continuePlay = False
 
+    #display score
+    show_score(scoreX, scoreY)
 
     if isLevelPrototype:
         currentLevel = level_Proto
@@ -227,7 +280,7 @@ while continuePlay:
 
     #insert if levelOne, etc...
         #insert level_one.draw...
-
+    spawn_coins()
     currentLevel.draw()
     pygame.display.update()
 
