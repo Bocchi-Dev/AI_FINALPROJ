@@ -40,7 +40,7 @@ coin_size_X = 30
 coin_size_Y = 30
 
 #platform Images
-prototypeImage = pygame.image.load('images/plat2.png')
+prototypeImage = pygame.image.load('images/l2plat2.png')
 level3Platform = pygame.image.load('images/l3plat6.png')
 level1Platform = pygame.image.load('images/l1plat1.png')
 level2Plaform = pygame.image.load('images/l2plat2.png')
@@ -134,7 +134,7 @@ class Player():
             directionX += 7
 
         #gravity
-        self.vel_y += 0.40
+        self.vel_y += 2
         if self.vel_y > 10:
             self.vel_y = 10
         directionY += self.vel_y
