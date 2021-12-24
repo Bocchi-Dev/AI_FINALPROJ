@@ -9,8 +9,10 @@ screen_height = 780
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Pusod ni lanz")
 bgcolor = (200, 200, 200)
+
+#BG Images
+level1bgImage = pygame.image.load("images/level1bg.png")
 level3bgImage = pygame.image.load("images/level3bg.png")
-screen.blit(level3bgImage, (0, 0))
 
 # Level 3 Enemy
 enemy = pygame.image.load("images/enemyfire.png")
@@ -37,22 +39,23 @@ coin_size_Y = 30
 #platform Images
 prototypeImage = pygame.image.load('images/plat2.png')
 level3Platform = pygame.image.load('images/l3plat6.png')
-#insert image of platforms for each level
-
+level1Platform = pygame.image.load('images/l1plat1.png')
 
 #bools for levels
-isLevelPrototype = True
-isLevelOne = False
+isLevelPrototype = False
+isLevelOne = True
 isLevelTwo = False
 isLevelThree = False
 
-#level platform positions
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 level3PlatformPos = [(782,94), (711, 94), (642, 94), (520, 134), (361, 134),
                      (241, 87), (26, 266), (177, 355), (255, 408), (325, 450),
                      (69, 483), (474, 545), (126, 659), (309, 686), (610, 649),
                      (805, 679), (831, 166)]
 #insert list of platform positions for each level
+Level1PlatformPos = [(200, 80), (320, 80), (440, 80), (-3, 250),
+                             (150, 350), (270, 350), (750, 300), (630, 300),
+                             (500, 500), (620, 500), (180, 620), (290, 620), (60, 620)]
 
 #score
 score = 0
@@ -238,13 +241,16 @@ class Level():
 
 # instantiating player and levels
 player = Player(100, screen_height - 130)
+
 level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, enemyPositions, enemy, level3bgImage,
                     (0, 0), prototypeLevelCoinsPos)
 level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, level3bgImage,
                     (100, 10), prototypeLevelCoinsPos)
+level_One = Level(Level1PlatformPos, level1Platform, enemyPositions, enemy, level1bgImage,
+                    (100, 10), prototypeLevelCoinsPos)
 # insert other levels
 
-currentLevel = level_Proto# change to level one later
+currentLevel = level_One# change to level one later
 
 pygame.display.update()
 
@@ -265,6 +271,9 @@ while continuePlay:
     if isLevelThree:
         screen.blit(level3bgImage, (0, 0))
         currentLevel = level_Three
+    if isLevelOne:
+        screen.blit(level1bgImage, (0, 0))
+        currentLevel = level_One
 
     currentLevel.draw()
     player.update()
