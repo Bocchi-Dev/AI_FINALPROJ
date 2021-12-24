@@ -13,7 +13,6 @@ level3bgImage = pygame.image.load("images/level3bg.png")
 # screen.fill(bgcolor)
 screen.blit(level3bgImage, (0, 0))
 
-
 # Level 3 Enemy
 enemy = pygame.image.load("images/enemyfire.png")
 enemy2 = pygame.image.load("images/enemyfire.png")
@@ -31,7 +30,6 @@ enemyPositions = [(166, 87), (256, 253), (529, 365), (804, 458),
                   (16, 586)]
 enemyPosXList = [166, 256, 529, 804, 16]
 
-
 #level3 goal
 level3Goal = pygame.image.load("images/lvl3Goal.png")
 level3GoalPosX = 807
@@ -41,8 +39,6 @@ level3GoalPosY = 618
 #set platform dimensions
 plat_size_X = 65
 plat_size_Y = 65
-
-
 
 #platform Images
 prototypeImage = pygame.image.load('images/plat2.png')
@@ -131,27 +127,61 @@ class Platform():
         #pygame.draw.rect(self.platform, (0, 0, 255), self.rect, 2)
         #screen.blit(self.platform, platformLocation)
 
+class Enemy():
+    def __init__(self, enemyPosition, enemyImage):
+        self.enemy = pygame.transform.scale(enemyImage, (enemy_size_X, enemy_size_Y))
+        self.rect = self.enemy.get_rect()
+        self.position = enemyPosition
+        self.rect.topleft = enemyPosition
+        self.rect.x = enemyPosition(0)
+        self.rect.y = enemyPosition(1)
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.goingLeft = True
+        self.goingRight = False
+
+    def update(self):
+        global enemyPosX
+        # Detects if the enemy is going left
+        if self.goingLeft:
+            enemyPosX += level3EnemySpeed2
+            screen.blit(enemy, (self.rect.x, self.rect.y))
+            # Enemy stops at this position
+            if (self.rect.x == self.position(0)):
+                self.goingLeft = False
+                self.goingRight = True
+
+        # Detects if the enemy is going right
+        if self.goingRight:
+            enemyPosX -= level3EnemySpeed2
+            screen.blit(enemy, (self.rect.x, self.rect.y))
+            # Enemy stops at this position
+            if (self.rect.x == (self.position(0) + 130)):
+                self.goingLeft = True
+                self.goingRight = False
+
+        screen.blit(enemy, (self.rect.x, self.rect.y))
+
 
 class Level():
-    def __init__(self, platformLocations, platformImage):
+    def __init__(self, platformLocations, platformImage, enemyLocations, enemyImage):
+        self.enemyLocation_list = enemyLocations
+        self.enemyImage = enemyImage
         self.platformLocation_list = platformLocations
         self.platformImage = platformImage
         self.platforms = []
+        self.enemies = []
 
     def draw(self):
         for i in range(len(self.platformLocation_list)):
             platformToSpawn = Platform(self.platformLocation_list[i], self.platformImage)
+            enemyToSpawn = Enemy(self.enemyLocation_list[i], self.enemyImage)
             self.platforms.append(platformToSpawn)
+            self.enemies.append(enemyToSpawn)
             pygame.draw.rect(self.platforms[i].platform, (0, 255, 0), self.platforms[i].rect, 2)
             screen.blit(self.platforms[i].platform, self.platforms[i].position)
 
-# instantiating player and levels
-player = Player(100, screen_height - 130)
-level_Proto = Level(prototypeLevelPlatformPos, prototypeImage)
-level_Three = Level(level3PlatformPos, level3Platform)
-# insert other levels
 
-currentLevel = level_Three# change to level one later
 
 #Spawns the level 3 enemy
 def spawnEnemylvl3():
@@ -194,6 +224,13 @@ def enemyMovementlvl3(enemy, x, y):
 def level3GoalObject(x, y):
     screen.blit(level3Goal, (x, y))
 
+# instantiating player and levels
+player = Player(100, screen_height - 130)
+level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, enemyPositions, enemy)
+level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy)
+# insert other levels
+
+currentLevel = level_Three# change to level one later
 
 pygame.display.update()
 
@@ -218,20 +255,23 @@ while continuePlay:
         screen.blit(level3bgImage, (0, 0))
         currentLevel = level_Three
         # Calls level 3 Goal
-        level3GoalObject(level3GoalPosX, level3GoalPosY)
+        #level3GoalObject(level3GoalPosX, level3GoalPosY)
         # Calls function to spawn enemy
-        spawnEnemylvl3()
+        #spawnEnemylvl3()
 
         # Makes enemy movement true
         enemyMovement = True
 
         if enemyMovement:
             # Calls the enemy movement
-            enemyMovementlvl3(enemy, enemyPosX, enemyPosY)
-
+            #enemyMovementlvl3(enemy, enemyPosX, enemyPosY)
+            for enemy in currentLevel.enemies:
+                enemy.update()
 
 
     player.update()
+
+
 
     #insert if levelOne, etc...
         #insert level_one.draw...
