@@ -133,38 +133,40 @@ class Enemy():
         self.rect = self.enemy.get_rect()
         self.position = enemyPosition
         self.rect.topleft = enemyPosition
-        self.rect.x = enemyPosition(0)
-        self.rect.y = enemyPosition(1)
-        self.width = self.image.get_width()
-        self.height = self.image.get_height()
-        self.goingLeft = True
-        self.goingRight = False
+        self.rect.x = enemyPosition[0]
+        self.rect.y = enemyPosition[1]
+        self.width = self.enemy.get_width()
+        self.height = self.enemy.get_height()
+        self.goingLeft = False
+        self.goingRight = True
+        self.enemySpeed = 2
 
     def update(self):
         global enemyPosX
         # Detects if the enemy is going left
         if self.goingLeft:
-            enemyPosX += level3EnemySpeed2
-            screen.blit(enemy, (self.rect.x, self.rect.y))
+            self.rect.x -= self.enemySpeed
+            screen.blit(self.enemy, (self.rect.x, self.rect.y))
             # Enemy stops at this position
-            if (self.rect.x == self.position(0)):
+            if (self.rect.x < self.position[0]):
                 self.goingLeft = False
                 self.goingRight = True
 
         # Detects if the enemy is going right
         if self.goingRight:
-            enemyPosX -= level3EnemySpeed2
-            screen.blit(enemy, (self.rect.x, self.rect.y))
+            self.rect.x += self.enemySpeed
+            screen.blit(self.enemy, self.rect)
             # Enemy stops at this position
-            if (self.rect.x == (self.position(0) + 130)):
+            if (self.rect.x > (self.position[0] + 130)):
                 self.goingLeft = True
                 self.goingRight = False
 
-        screen.blit(enemy, (self.rect.x, self.rect.y))
+        screen.blit(self.enemy, self.rect)
 
 
 class Level():
-    def __init__(self, platformLocations, platformImage, enemyLocations, enemyImage):
+    def __init__(self, platformLocations, platformImage, enemyLocations, enemyImage, backgroundImage):
+        self.background = backgroundImage
         self.enemyLocation_list = enemyLocations
         self.enemyImage = enemyImage
         self.platformLocation_list = platformLocations
@@ -173,52 +175,18 @@ class Level():
         self.enemies = []
 
     def draw(self):
+        screen.blit(self.background, (0, 0))
         for i in range(len(self.platformLocation_list)):
             platformToSpawn = Platform(self.platformLocation_list[i], self.platformImage)
-            enemyToSpawn = Enemy(self.enemyLocation_list[i], self.enemyImage)
             self.platforms.append(platformToSpawn)
-            self.enemies.append(enemyToSpawn)
             pygame.draw.rect(self.platforms[i].platform, (0, 255, 0), self.platforms[i].rect, 2)
             screen.blit(self.platforms[i].platform, self.platforms[i].position)
 
-
-
-#Spawns the level 3 enemy
-def spawnEnemylvl3():
-    screen.blit(enemy, enemyPositions[0])
-    screen.blit(enemy, enemyPositions[1])
-    screen.blit(enemy, enemyPositions[2])
-    screen.blit(enemy, enemyPositions[3])
-    screen.blit(enemy, enemyPositions[4])
-
-
-# Movement for the level 3 enemy
-def enemyMovementlvl3(enemy, x, y):
-    global enemyPosX
-    global goingRight
-    global goingLeft
-
-    # Detects if the enemy is going left
-    if goingLeft:
-        enemyPosX += level3EnemySpeed2
-        screen.blit(enemy, (x, y))
-        # Enemy stops at this position
-        if (enemyPosX == 480.99999999999255):
-            goingLeft = False
-            goingRight = True
-
-    # Detects if the enemy is going right
-    if goingRight:
-        enemyPosX -= level3EnemySpeed2
-        screen.blit(enemy, (x, y))
-        # Enemy stops at this position
-        if (enemyPosX == 350.59999999999997):
-            goingLeft = True
-            goingRight = False
-
-    screen.blit(enemy, (x, y))
-
-
+        for i in range(len(self.enemyLocation_list)):
+            enemyToSpawn = Enemy(self.enemyLocation_list[i], self.enemyImage)
+            self.enemies.append(enemyToSpawn)
+            #screen.blit(self.enemies[i].enemy, self.enemies[i].position)
+            self.enemies[i].update()
 
 #Level 3 Goal
 def level3GoalObject(x, y):
@@ -226,8 +194,8 @@ def level3GoalObject(x, y):
 
 # instantiating player and levels
 player = Player(100, screen_height - 130)
-level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, enemyPositions, enemy)
-level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy)
+level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, enemyPositions, enemy, level3bgImage)
+level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, level3bgImage)
 # insert other levels
 
 currentLevel = level_Three# change to level one later
@@ -254,24 +222,8 @@ while continuePlay:
     if isLevelThree:
         screen.blit(level3bgImage, (0, 0))
         currentLevel = level_Three
-        # Calls level 3 Goal
-        #level3GoalObject(level3GoalPosX, level3GoalPosY)
-        # Calls function to spawn enemy
-        #spawnEnemylvl3()
-
-        # Makes enemy movement true
-        enemyMovement = True
-
-        if enemyMovement:
-            # Calls the enemy movement
-            #enemyMovementlvl3(enemy, enemyPosX, enemyPosY)
-            for enemy in currentLevel.enemies:
-                enemy.update()
-
 
     player.update()
-
-
 
     #insert if levelOne, etc...
         #insert level_one.draw...
