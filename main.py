@@ -29,8 +29,8 @@ enemyPositions = [(500, 30), (200, 300), (600, 250), (529, 450), (200, 458),
 
 #level 2 goal
 level2Goal = pygame.image.load("images/lvl2Goal.png")
-level2GoalPosX = 600
-level2GoalPosY = 618
+level2GoalPosX = 750
+level2GoalPosY = 700
 
 #set platform dimensions
 plat_size_X = 100
@@ -295,8 +295,8 @@ while continuePlay:
     currentLevel.draw()
     player.update()
     spawn_coins()
-    pygame.display.update()
     level2GoalObject(level2GoalPosX, level2GoalPosY)
+    pygame.display.update()
 
 pygame.quit()
 sys.exit()
