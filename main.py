@@ -261,7 +261,7 @@ level_One = Level(Level1PlatformPos, level1Platform, enemyPositions, enemy, leve
 level_Two = Level(level2PlatformPos, level2Plaform, enemyPositions, enemy, level1bgImage,
                   (100, 10), prototypeLevelCoinsPos, level3Goal, (807, 618))
 level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, level3bgImage,
-                    (100, 10), prototypeLevelCoinsPos, level3Goal, (807, 618))
+                    (825, 31), prototypeLevelCoinsPos, level3Goal, (807, 618))
 
 # insert other levels
 
