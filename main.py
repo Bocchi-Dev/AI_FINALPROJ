@@ -26,7 +26,7 @@ enemy_size_X = 64
 enemy_size_Y = 64
 enemyPositions = [(163, 137), (256, 253), (529, 365), (804, 458),
                   (16, 586)]
-level3EnemyPositions = [(18, 127), (256, 253), (404, 371), (556, 460),
+level3EnemyPositions = [(17, 126), (256, 253), (404, 371), (556, 460),
                   (16, 586)]
 
 #level3 goal
@@ -260,8 +260,8 @@ level_One = Level(Level1PlatformPos, level1Platform, enemyPositions, enemy, leve
                     (100, 10), prototypeLevelCoinsPos, level3Goal, (807, 618))
 level_Two = Level(level2PlatformPos, level2Plaform, enemyPositions, enemy, level1bgImage,
                   (100, 10), prototypeLevelCoinsPos, level3Goal, (807, 618))
-level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, level3bgImage,
-                    (825, 31), prototypeLevelCoinsPos, level3Goal, (807, 618))
+level_Three = Level(level3PlatformPos, level3Platform, level3EnemyPositions, enemy, level3bgImage,
+                    (825, 31), level3CoinsPos, level3Goal, (807, 618))
 
 # insert other levels
 
