@@ -24,7 +24,9 @@ enemy2 = pygame.image.load("images/enemyfire.png")
 #enemy dimensions
 enemy_size_X = 64
 enemy_size_Y = 64
-enemyPositions = [(166, 87), (256, 253), (529, 365), (804, 458),
+enemyPositions = [(163, 137), (256, 253), (529, 365), (804, 458),
+                  (16, 586)]
+level3EnemyPositions = [(18, 127), (256, 253), (404, 371), (556, 460),
                   (16, 586)]
 
 #level3 goal
@@ -47,9 +49,9 @@ level2Plaform = pygame.image.load('images/l2plat2.png')
 
 #bools for levels
 isLevelPrototype = False
-isLevelOne = True
+isLevelOne = False
 isLevelTwo = False
-isLevelThree = False
+isLevelThree = True
 
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 
@@ -77,6 +79,8 @@ scoreY = 10
 #coins
 coinImage = pygame.image.load('images/coin.png')
 prototypeLevelCoinsPos = [(50, 500), (150, 200), (350, 50)]
+level3CoinsPos = [(537, 86), (35, 214), (470, 310), (130, 609),
+                  (732, 565), (389, 603)]
 Coins = []
 
 def set_Coins(coinLocations):
@@ -135,7 +139,7 @@ class Player():
 
         #gravity
         self.vel_y += 2
-        if self.vel_y > 10:
+        if self.vel_y > 0.40:
             self.vel_y = 10
         directionY += self.vel_y
 
@@ -146,6 +150,7 @@ class Player():
             self.rect.x = screen_width - 50
         if self.rect.top <= 0:
             self.rect.y = screen_height
+
 
         #check for collision with world
         collision_tolerance = 10
@@ -249,7 +254,6 @@ class Level():
             self.enemies[i].update()
 
 
-
 # instantiating player and levels
 player = Player(100, screen_height - 130)
 
@@ -259,11 +263,11 @@ level_One = Level(Level1PlatformPos, level1Platform, enemyPositions, enemy, leve
                     (100, 10), prototypeLevelCoinsPos)
 level_Two = Level(level2PlatformPos, level2Plaform, enemyPositions, enemy, level1bgImage,
                     (100, 10), prototypeLevelCoinsPos)
-level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, level3bgImage,
-                    (100, 10), prototypeLevelCoinsPos)
+level_Three = Level(level3PlatformPos, level3Platform, level3EnemyPositions, enemy, level3bgImage,
+                    (822, 29), level3CoinsPos)
 # insert other levels
 
-currentLevel = level_One# change to level one later
+currentLevel = level_Three# change to level one later
 
 pygame.display.update()
 
@@ -279,9 +283,9 @@ while continuePlay:
 
     if isLevelPrototype:
         currentLevel = level_Proto
-
     if isLevelThree:
-        screen.blit(level3bgImage, (0, 0))
+        # screen.blit(level3bgImage, (0, 0))
+        # level3GoalObject(level3GoalPosX, level3GoalPosY)
         currentLevel = level_Three
     if isLevelOne:
         screen.blit(level1bgImage, (0, 0))
@@ -294,6 +298,7 @@ while continuePlay:
     player.update()
     spawn_coins()
     pygame.display.update()
+
 
 pygame.quit()
 sys.exit()
