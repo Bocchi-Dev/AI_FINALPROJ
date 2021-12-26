@@ -30,7 +30,7 @@ enemyPositions = [(500, 30), (200, 300), (600, 250), (529, 450), (200, 458),
 #level 2 goal
 level2Goal = pygame.image.load("images/lvl2Goal.png")
 level2GoalPosX = 750
-level2GoalPosY = 700
+level2GoalPosY = 720
 
 #set platform dimensions
 plat_size_X = 100
@@ -78,7 +78,8 @@ scoreY = 10
 
 #coins
 coinImage = pygame.image.load('images/coin.png')
-prototypeLevelCoinsPos = [(50, 500), (150, 200), (350, 50)]
+prototypeLevelCoinsPos = [(80, 590), (50, 230), (250, 50), (350, 50), (480, 50), (200, 590), (200, 320), (300, 320), (640, 270),
+                          (640, 470), (550, 470), (500, 750), (550, 750), (600, 750), (650, 750)]
 Coins = []
 
 def set_Coins(coinLocations):
