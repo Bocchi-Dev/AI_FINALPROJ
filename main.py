@@ -17,20 +17,20 @@ level1bgImage = pygame.image.load("images/level1bg.png")
 level2bgImage = pygame.image.load("images/level2bg.png")
 level3bgImage = pygame.image.load("images/level3bg.png")
 
-# Level 3 Enemy
+# Level 2 Enemy
 enemy = pygame.image.load("images/enemyfire.png")
 enemy2 = pygame.image.load("images/enemyfire.png")
 
 #enemy dimensions
 enemy_size_X = 64
 enemy_size_Y = 64
-enemyPositions = [(166, 87), (256, 253), (529, 365), (804, 458),
-                  (16, 586)]
+enemyPositions = [(500, 30), (200, 300), (600, 250), (529, 450), (200, 458),
+                  (40, 560)]
 
-#level3 goal
-level3Goal = pygame.image.load("images/lvl3Goal.png")
-level3GoalPosX = 807
-level3GoalPosY = 618
+#level 2 goal
+level2Goal = pygame.image.load("images/lvl2Goal.png")
+level2GoalPosX = 600
+level2GoalPosY = 618
 
 #set platform dimensions
 plat_size_X = 100
@@ -57,12 +57,14 @@ prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 Level1PlatformPos = [(200, 80), (320, 80), (440, 80), (-3, 250),
                              (150, 350), (270, 350), (750, 300), (630, 300),
                              (500, 500), (620, 500), (180, 620), (290, 620), (60, 620)]
+
 level2PlatformPos = [(10, 130), (200, 250), (270, 250),
                              (500, 100),  (400, 180), (800, 250),
                              (730, 250), (70, 350), (180, 450),
                              (250, 450), (450, 450), (600, 350),
                              (700, 600), (630, 600),(560, 600),
                              (490, 600), (300, 700)]
+
 level3PlatformPos = [(782,94), (711, 94), (642, 94), (520, 134), (361, 134),
                      (241, 87), (26, 266), (177, 355), (255, 408), (325, 450),
                      (69, 483), (474, 545), (126, 659), (309, 686), (610, 649),
@@ -100,9 +102,9 @@ def show_score(x, y):
     score_display = font.render("Score: " + str(score), True, (255, 255, 255))
     screen.blit(score_display, (x, y))
 
-#Level 3 Goal
-def level3GoalObject(x, y):
-    screen.blit(level3Goal, (x, y))
+#Level 2 Goal
+def level2GoalObject(x, y):
+    screen.blit(level2Goal, (x, y))
 
 class Player():
     def __init__(self, x, y):
@@ -263,7 +265,7 @@ level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, le
                     (100, 10), prototypeLevelCoinsPos)
 # insert other levels
 
-currentLevel = level_One# change to level one later
+currentLevel = level_Two
 
 pygame.display.update()
 
@@ -294,6 +296,7 @@ while continuePlay:
     player.update()
     spawn_coins()
     pygame.display.update()
+    level2GoalObject(level2GoalPosX, level2GoalPosY)
 
 pygame.quit()
 sys.exit()
