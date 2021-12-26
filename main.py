@@ -222,7 +222,7 @@ class Level():
     def __init__(self, platformLocations, platformImage, enemyLocations, enemyImage, backgroundImage,
                  playerSpawn, coinLocations, goalObject, goalObjectSpawn):
         self.background = backgroundImage
-        self.goalObject = pygame.transform.scale(goalObject, (50, 50))
+        self.goalObject = pygame.transform.scale(goalObject, (64, 64))
         self.goalSpawn = goalObjectSpawn
         self.enemyLocation_list = enemyLocations
         self.enemyImage = enemyImage
