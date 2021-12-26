@@ -30,7 +30,7 @@ enemyPositions = [(500, 30), (200, 300), (600, 250), (529, 450), (200, 458),
 
 #level 2 goal
 level2Goal = pygame.image.load("images/lvl2Goal.png")
-level2GoalPosX = 750
+level2GoalPosX = 800
 level2GoalPosY = 720
 
 level3EnemyPositions = [(18, 127), (256, 253), (404, 371), (556, 460),
@@ -59,8 +59,8 @@ level2Plaform = pygame.image.load('images/l2plat2.png')
 #bools for levels
 isLevelPrototype = False
 isLevelOne = False
-isLevelTwo = False
-isLevelThree = True
+isLevelTwo = True
+isLevelThree = False
 
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 
@@ -277,8 +277,8 @@ level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, enemyPositions, e
                     (0, 0), prototypeLevelCoinsPos, level3Goal, (807, 618))
 level_One = Level(Level1PlatformPos, level1Platform, enemyPositions, enemy, level1bgImage,
                     (100, 10), prototypeLevelCoinsPos, level3Goal, (807, 618))
-level_Two = Level(level2PlatformPos, level2Plaform, enemyPositions, enemy, level1bgImage,
-                  (100, 10), prototypeLevelCoinsPos, level3Goal, (807, 618))
+level_Two = Level(level2PlatformPos, level2Plaform, enemyPositions, enemy, level2bgImage,
+                  (90, 10), prototypeLevelCoinsPos, level2Goal, (800, 720))
 level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, level3bgImage,
                     (825, 31), prototypeLevelCoinsPos, level3Goal, (807, 618))
 
