@@ -17,20 +17,19 @@ level1bgImage = pygame.image.load("images/level1bg.png")
 level2bgImage = pygame.image.load("images/level2bg.png")
 level3bgImage = pygame.image.load("images/level3bg.png")
 
-# Level 3 Enemy
+# Level 1 Enemy
 enemy = pygame.image.load("images/enemyfire.png")
 enemy2 = pygame.image.load("images/enemyfire.png")
 
 #enemy dimensions
 enemy_size_X = 64
 enemy_size_Y = 64
-enemyPositions = [(166, 87), (256, 253), (529, 365), (804, 458),
-                  (16, 586)]
+enemyPositions = [(200, 20), (256, 290), (529, 440)]
 
-#level3 goal
-level3Goal = pygame.image.load("images/lvl3Goal.png")
-level3GoalPosX = 807
-level3GoalPosY = 618
+#level1 goal
+level1Goal = pygame.image.load("images/lvl1Goal.png")
+level1GoalPosX = 807
+level1GoalPosY = 618
 
 #set platform dimensions
 plat_size_X = 100
@@ -100,9 +99,9 @@ def show_score(x, y):
     score_display = font.render("Score: " + str(score), True, (255, 255, 255))
     screen.blit(score_display, (x, y))
 
-#Level 3 Goal
-def level3GoalObject(x, y):
-    screen.blit(level3Goal, (x, y))
+#Level 1 Goal
+def level1GoalObject(x, y):
+    screen.blit(level1Goal, (x, y))
 
 class Player():
     def __init__(self, x, y):
