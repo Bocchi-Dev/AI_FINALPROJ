@@ -105,10 +105,6 @@ def show_score(x, y):
     score_display = font.render("Score: " + str(score), True, (255, 255, 255))
     screen.blit(score_display, (x, y))
 
-#Level 3 Goal
-def level3GoalObject(x, y):
-    screen.blit(level3Goal, (x, y))
-
 class Player():
     def __init__(self, x, y):
         sprite = pygame.image.load('images/ice.png')
@@ -175,10 +171,6 @@ class Player():
         self.rect.x += directionX
         self.rect.y += directionY
 
-        if self.rect.bottom > screen_height:
-            self.rect.bottom = screen_height
-            directionY = 0
-
         pygame.draw.rect(screen, (255, 0, 0), self.rect, 2)
         screen.blit(self.image, self.rect)
 
@@ -228,8 +220,10 @@ class Enemy():
 
 class Level():
     def __init__(self, platformLocations, platformImage, enemyLocations, enemyImage, backgroundImage,
-                 playerSpawn, coinLocations):
+                 playerSpawn, coinLocations, goalObject, goalObjectSpawn):
         self.background = backgroundImage
+        self.goalObject = pygame.transform.scale(goalObject, (50, 50))
+        self.goalSpawn = goalObjectSpawn
         self.enemyLocation_list = enemyLocations
         self.enemyImage = enemyImage
         self.platformLocation_list = platformLocations
@@ -243,6 +237,7 @@ class Level():
 
     def draw(self):
         screen.blit(self.background, (0, 0))
+        screen.blit(self.goalObject, self.goalSpawn)
         for i in range(len(self.platformLocation_list)):
             platformToSpawn = Platform(self.platformLocation_list[i], self.platformImage)
             self.platforms.append(platformToSpawn)
@@ -253,7 +248,6 @@ class Level():
         for i in range(len(self.enemyLocation_list)):
             enemyToSpawn = Enemy(self.enemyLocation_list[i], self.enemyImage)
             self.enemies.append(enemyToSpawn)
-            #screen.blit(self.enemies[i].enemy, self.enemies[i].position)
             self.enemies[i].update()
 
 
@@ -261,13 +255,14 @@ class Level():
 player = Player(100, screen_height - 130)
 
 level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, enemyPositions, enemy, level3bgImage,
-                    (0, 0), prototypeLevelCoinsPos)
+                    (0, 0), prototypeLevelCoinsPos, level3Goal, (807, 618))
 level_One = Level(Level1PlatformPos, level1Platform, enemyPositions, enemy, level1bgImage,
-                    (100, 10), prototypeLevelCoinsPos)
+                    (100, 10), prototypeLevelCoinsPos, level3Goal, (807, 618))
 level_Two = Level(level2PlatformPos, level2Plaform, enemyPositions, enemy, level1bgImage,
-                    (100, 10), prototypeLevelCoinsPos)
-level_Three = Level(level3PlatformPos, level3Platform, level3EnemyPositions, enemy, level3bgImage,
-                    (822, 29), level3CoinsPos)
+                  (100, 10), prototypeLevelCoinsPos, level3Goal, (807, 618))
+level_Three = Level(level3PlatformPos, level3Platform, enemyPositions, enemy, level3bgImage,
+                    (100, 10), prototypeLevelCoinsPos, level3Goal, (807, 618))
+
 # insert other levels
 
 currentLevel = level_Three# change to level one later
@@ -276,30 +271,25 @@ pygame.display.update()
 
 continuePlay = True
 while continuePlay:
-    # screen.fill(bgcolor)
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             continuePlay = False
-    #display score
-    show_score(scoreX, scoreY)
 
     if isLevelPrototype:
         currentLevel = level_Proto
     if isLevelThree:
-        level3GoalObject(level3GoalPosX, level3GoalPosY)
-        pygame.display.update()
         currentLevel = level_Three
     if isLevelOne:
-        screen.blit(level1bgImage, (0, 0))
         currentLevel = level_One
     if isLevelTwo:
-        screen.blit(level2bgImage, (0, 0))
         currentLevel = level_Two
 
     currentLevel.draw()
     player.update()
     spawn_coins()
+    #display score
+    show_score(scoreX, scoreY)
+
     pygame.display.update()
 
 
