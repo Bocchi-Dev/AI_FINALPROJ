@@ -287,8 +287,8 @@ while continuePlay:
     if isLevelPrototype:
         currentLevel = level_Proto
     if isLevelThree:
-        # screen.blit(level3bgImage, (0, 0))
         level3GoalObject(level3GoalPosX, level3GoalPosY)
+        pygame.display.update()
         currentLevel = level_Three
     if isLevelOne:
         screen.blit(level1bgImage, (0, 0))
