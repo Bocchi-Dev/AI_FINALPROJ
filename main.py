@@ -47,9 +47,9 @@ level2Plaform = pygame.image.load('images/l2plat2.png')
 
 #bools for levels
 isLevelPrototype = False
-isLevelOne = False
+isLevelOne = True
 isLevelTwo = False
-isLevelThree = True
+isLevelThree = False
 
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 
@@ -94,7 +94,6 @@ def spawn_coins():
         if c.colliderect(player):
             Coins.remove(c)
             score += 1
-            print(score)
 
 def show_score(x, y):
     score_display = font.render("Score: " + str(score), True, (255, 255, 255))
@@ -158,7 +157,6 @@ class Player():
                     directionY = plat.rect.bottom - self.rect.top
                     self.vel_y = 0
                 if self.vel_y >= 0 and self.rect.top < plat.rect.top: #check if fall on ground
-                    print(self.vel_y)
                     self.rect.bottom = plat.rect.top
 
         #update player location
@@ -273,7 +271,6 @@ while continuePlay:
         currentLevel = level_Proto
 
     if isLevelThree:
-        #level3GoalObject(100, 100)
         currentLevel = level_Three
     if isLevelOne:
         currentLevel = level_One
