@@ -59,9 +59,10 @@ level2Platform = pygame.image.load('images/l2plat2.png')
 
 #bools for levels
 isLevelPrototype = False
-isLevelOne = True
+isLevelOne = False
 isLevelTwo = False
-isLevelThree = False
+isLevelThree = True
+isGameOver = False
 
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 
@@ -102,6 +103,8 @@ Coins = []
 
 #enemies
 enemiesPresent = True
+
+endBanner = pygame.image.load('images/endBanner.png')
 
 def set_Coins(coinLocations):
     global Coins
@@ -313,6 +316,7 @@ while continuePlay:
         currentLevel = level_Proto
     if isLevelOne:
         currentLevel = level_One
+        currentLevel.draw()
         # check for collision with goal
         if player.rect.colliderect(currentLevel.goalRect):
             if (isLevelOne):
@@ -322,6 +326,7 @@ while continuePlay:
                 player.rect.y = level_Two.playerSpawn[1]
     if isLevelTwo:
         currentLevel = level_Two
+        currentLevel.draw()
         if player.rect.colliderect(currentLevel.goalRect):
             if (isLevelTwo):
                 isLevelTwo = False
@@ -330,10 +335,17 @@ while continuePlay:
                 player.rect.y = level_Three.playerSpawn[1]
     if isLevelThree:
         currentLevel = level_Three
+        currentLevel.draw()
+        if player.rect.colliderect(currentLevel.goalRect):
+            if (isLevelThree):
+                isLevelThree = False
+                screen.fill((155, 255, 255))
+                screen.blit(endBanner, (0, 243))
+                isGameOver = True
 
-    currentLevel.draw()
-    player.update()
-    spawn_coins()
+    if not isGameOver:
+        player.update()
+        spawn_coins()
     #display score
     show_score(scoreX, scoreY)
 
