@@ -50,9 +50,9 @@ level2Plaform = pygame.image.load('images/l2plat2.png')
 
 #bools for levels
 isLevelPrototype = False
-isLevelOne = True
+isLevelOne = False
 isLevelTwo = False
-isLevelThree = False
+isLevelThree = True
 
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
 
