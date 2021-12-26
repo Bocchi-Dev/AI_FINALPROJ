@@ -78,7 +78,8 @@ scoreY = 10
 
 #coins
 coinImage = pygame.image.load('images/coin.png')
-prototypeLevelCoinsPos = [(50, 500), (150, 200), (350, 50)]
+prototypeLevelCoinsPos = [(80, 590), (50, 230), (350, 50), (200, 590), (200, 320), (300, 320), (640, 270),
+                          (750, 700), (700, 680), (660, 700), (620, 720)]
 Coins = []
 
 def set_Coins(coinLocations):
