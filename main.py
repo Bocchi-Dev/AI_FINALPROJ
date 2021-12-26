@@ -59,9 +59,9 @@ level2Platform = pygame.image.load('images/l2plat2.png')
 
 #bools for levels
 isLevelPrototype = False
-isLevelOne = False
+isLevelOne = True
 isLevelTwo = False
-isLevelThree = True
+isLevelThree = False
 isGameOver = False
 
 prototypeLevelPlatformPos = [(10, 500), (100, 200), (300, 50), (500, 700)]
@@ -193,13 +193,12 @@ class Player():
             for baddie in currentLevel.enemies:
                 if self.rect.colliderect(baddie.rect):
                     #get rid of enemy
-                    currentLevel.enemies.remove(baddie)
-                    #baddie.rect.x = 1000
-                    #baddie.rect.y = 1000
-                    #baddie.rect.topleft = (1000, 1000)
+                    #currentLevel.enemies.remove(baddie)
+                    baddie.rect.x = 1000000
+                    baddie.rect.y = 1000000
+                    baddie.rect.topleft = (1000000, 1000000)
 
-                    score -= 1
-
+                    score = 0
 
         #update player location
         self.rect.x += directionX
@@ -270,7 +269,6 @@ class Level():
         self.playerSpawn = playerSpawn
         player.rect.x = playerSpawn[0]
         player.rect.y = playerSpawn[1]
-        set_Coins(coinLocations)
 
     def draw(self):
         screen.blit(self.background, (0, 0))
@@ -298,11 +296,13 @@ level_Proto = Level(prototypeLevelPlatformPos, prototypeImage, level1EnemyPositi
 level_One = Level(Level1PlatformPos, level1Platform, level1EnemyPositions, enemy, level1bgImage,
                     (100, 10), Level1CoinsPos, level1Goal, (level1GoalPosX, level1GoalPosY))
 level_Two = Level(level2PlatformPos, level2Platform, level2EnemyPositions, enemy, level1bgImage,
-                  (100, 10), Level1CoinsPos, level3Goal, (level2GoalPosX, level2GoalPosY))
+                  (100, 10), level2CoinsPos, level3Goal, (level2GoalPosX, level2GoalPosY))
 level_Three = Level(level3PlatformPos, level3Platform, level3EnemyPositions, enemy, level3bgImage,
                     (825, 31), level3CoinsPos, level3Goal, (level3GoalPosX, level3GoalPosY))
 
+#Initialize level one junk
 currentLevel = level_One
+set_Coins(level_One.coinsPos)
 
 pygame.display.update()
 
@@ -324,6 +324,8 @@ while continuePlay:
                 isLevelTwo = True
                 player.rect.x = level_Two.playerSpawn[0]
                 player.rect.y = level_Two.playerSpawn[1]
+                Coins.clear()
+                set_Coins(level_Two.coinsPos)
     if isLevelTwo:
         currentLevel = level_Two
         currentLevel.draw()
@@ -333,6 +335,8 @@ while continuePlay:
                 isLevelThree = True
                 player.rect.x = level_Three.playerSpawn[0]
                 player.rect.y = level_Three.playerSpawn[1]
+                Coins.clear()
+                set_Coins(level_Three.coinsPos)
     if isLevelThree:
         currentLevel = level_Three
         currentLevel.draw()
