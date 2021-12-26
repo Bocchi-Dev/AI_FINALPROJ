@@ -33,6 +33,7 @@ level3EnemyPositions = [(18, 127), (256, 253), (404, 371), (556, 460),
 level3Goal = pygame.image.load("images/lvl3Goal.png")
 level3GoalPosX = 807
 level3GoalPosY = 618
+level3GoalPosition = [(807, 618)]
 
 #set platform dimensions
 plat_size_X = 100
@@ -128,7 +129,7 @@ class Player():
         #get movement
         key = pygame.key.get_pressed()
         if key[pygame.K_SPACE] and self.jumped == False:
-            self.vel_y = -10 #jump speed
+            self.vel_y = -20 #jump speed
             self.jumped = True
         if key[pygame.K_SPACE] == False:
             self.jumped = False
@@ -139,7 +140,7 @@ class Player():
 
         #gravity
         self.vel_y += 2
-        if self.vel_y > 0.40:
+        if self.vel_y > 10:
             self.vel_y = 10
         directionY += self.vel_y
 
@@ -150,6 +151,8 @@ class Player():
             self.rect.x = screen_width - 50
         if self.rect.top <= 0:
             self.rect.y = screen_height
+        if self.rect.bottom >= screen_height:
+            self.rect.y = 0
 
 
         #check for collision with world
@@ -285,7 +288,7 @@ while continuePlay:
         currentLevel = level_Proto
     if isLevelThree:
         # screen.blit(level3bgImage, (0, 0))
-        # level3GoalObject(level3GoalPosX, level3GoalPosY)
+        level3GoalObject(level3GoalPosX, level3GoalPosY)
         currentLevel = level_Three
     if isLevelOne:
         screen.blit(level1bgImage, (0, 0))
